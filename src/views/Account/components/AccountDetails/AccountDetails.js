@@ -28,7 +28,11 @@ const AccountDetails = props => {
     email: 'shen.zhi@devias.io',
     phone: '',
     state: 'Alabama',
-    country: 'USA'
+    country: 'USA',
+    businessAddress:'something',
+    businessEmail:'something@sdsd.fdg',
+    businessName:'something',
+    businessPhone:'1111111',
   });
 
   const handleChange = event => {
@@ -178,6 +182,67 @@ const AccountDetails = props => {
                 onChange={handleChange}
                 required
                 value={values.country}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Business name"
+                margin="dense"
+                name="businesstName"
+                onChange={handleChange}
+                required
+                value={values.businessName}
+                variant="outlined"
+              />
+            </Grid><Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Business Address"
+                margin="dense"
+                name="bussinessAddres"
+                onChange={handleChange}
+                required
+                value={values.businessAddress}
+                variant="outlined"
+              />
+            </Grid><Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Business Phone"
+                margin="dense"
+                name="businessPhone"
+                onChange={handleChange}
+                required
+                value={values.businessPhone}
+                variant="outlined"
+              />
+            </Grid><Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Business Email"
+                margin="dense"
+                name="businessEmail"
+                onChange={handleChange}
+                required
+                value={values.businessEmail}
                 variant="outlined"
               />
             </Grid>

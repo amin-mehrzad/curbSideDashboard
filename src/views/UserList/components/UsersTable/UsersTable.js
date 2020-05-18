@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -21,6 +21,25 @@ import {
 
 import { getInitials } from 'helpers';
 
+import MaterialTable from 'material-table';
+import {
+  AddBox,
+  ArrowDownward,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Clear,
+  DeleteOutline,
+  Edit,
+  FilterList,
+  FirstPage,
+  LastPage,
+  Remove,
+  SaveAlt,
+  Search,
+  ViewColumn
+} from "@material-ui/icons";
+/*
 const useStyles = makeStyles(theme => ({
   root: {},
   content: {
@@ -185,3 +204,141 @@ UsersTable.propTypes = {
 };
 
 export default UsersTable;
+
+
+https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg
+
+
+*/
+
+export default function MaterialTableDemo() {
+  const [state, setState] = React.useState({
+    columns: [
+      {
+        field: 'url',
+        title: 'Picture',
+        render: rowData => <img src={rowData.imageUrl} style={{ width: 30, height: 30, borderRadius: '20%' }} />
+      },
+      { title: 'Name', field: 'name' },
+      { title: 'Price', field: 'price', type: 'numeric' },
+      { title: 'QTY', field: 'qty', type: 'numeric' },
+
+      {
+        title: 'Tax',
+        field: 'tax',
+        lookup: { 0: 'No', 1: 'Yes' },
+      },
+      { title: 'Barcode', field: 'barcode' },
+      {
+        title: 'Category', field: 'category', lookup: {
+          0: 'Catogory 1',
+          1: 'Category 2',
+          2: 'Category 3'
+        }
+      },
+      {
+        title: 'Featured',
+        field: 'featured',
+        lookup: { 0: 'No', 1: 'Yes' },
+      },
+      {
+        title: 'Active',
+        field: 'active',
+        lookup: { 0: 'No', 1: 'Yes' },
+      },
+    ],
+    data: [
+
+      {
+        name: 'food1',
+        price: '9.99',
+        qty: 1,
+        tax: 1,
+        imageUrl: 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg',
+        featured: 1,
+        barcode: 'dkf4444444dsd4',
+        category: 2,
+        active:1
+
+      },
+      {
+        imageUrl: 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg',
+        name: 'Zerya Betül',
+        price: '11.99',
+        qty: 2,
+        tax: 0,
+        featured: 0,
+        category: 0,
+        barcode: '3332hskj4sss564',
+        active:0
+
+      },
+    ],
+  });
+
+
+  const tableIcons = {
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  };
+  return (
+    <MaterialTable
+      title="Products"
+      columns={state.columns}
+      data={state.data}
+      icons={tableIcons}
+      editable={{
+        onRowAdd: (newData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              setState((prevState) => {
+                const data = [...prevState.data];
+                data.push(newData);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              if (oldData) {
+                setState((prevState) => {
+                  const data = [...prevState.data];
+                  data[data.indexOf(oldData)] = newData;
+                  return { ...prevState, data };
+                });
+              }
+            }, 600);
+          }),
+        onRowDelete: (oldData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              setState((prevState) => {
+                const data = [...prevState.data];
+                data.splice(data.indexOf(oldData), 1);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+      }}
+    />
+  );
+}
