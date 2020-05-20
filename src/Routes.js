@@ -17,6 +17,8 @@ import {
   NotFound as NotFoundView
 } from './views';
 
+import PrivateRoute from '../src/components/private-route/PrivateRoute'
+
 const Routes = () => {
   return (
     <Switch>
@@ -67,13 +69,13 @@ const Routes = () => {
         layout={MainLayout}
         path="/settings"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={SignUpView}
         exact
         layout={MinimalLayout}
         path="/sign-up"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={SignInView}
         exact
         layout={MinimalLayout}
