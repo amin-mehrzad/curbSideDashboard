@@ -18,7 +18,7 @@ export const registerUser = (userData, history) => dispatch => {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         })
-        .then(res => history.push("/signin")) // re-direct to login on successful register
+        .then(res => history.push("/sign-in")) // re-direct to login on successful register
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,

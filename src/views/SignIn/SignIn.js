@@ -139,7 +139,7 @@ class SignIn extends Component {
     super();
     this.state = {
       form: {
-        isValid: false,
+       // isValid: false,
         values: {},
         touched: {},
         errors: {}
@@ -149,7 +149,8 @@ class SignIn extends Component {
      // errors: {}
     }
     this.classes = useStyles;
-
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSignIn = this.handleSignIn.bind(this);
   }
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
@@ -214,13 +215,18 @@ class SignIn extends Component {
     this.history.goBack();
   };
 
-  handleChange = event => {
-    event.persist();
+  handleChange = (event) => {
+   // var that=this
 
+   // event.persist();
+    console.log(this.state)
+  //  const formErrors = validate(this.state.form.values, schema);
+   // console.log(formErrors)
     this.setState({
-      ...this.state.form,
+      //...this.state.form,
+      form:{
       values: {
-        ...this.state.form.values,
+       ...this.state.form.values,
         [event.target.name]:
           event.target.type === 'checkbox'
             ? event.target.checked
@@ -229,8 +235,13 @@ class SignIn extends Component {
       touched: {
         ...this.state.form.touched,
         [event.target.name]: true
-      }
+      },
+     // isValid: formErrors ? false : true,
+      errors:  {}
+    }},()=>{
+      console.log(this.state)
     });
+    
   };
 
   componentWillReceiveProps(nextProps) {
@@ -244,16 +255,16 @@ class SignIn extends Component {
       });
     }
   }
-  handleSignIn = event => {
+  handleSignIn = (event) => {
     event.preventDefault();
     console.log(process.env.REACT_APP_BACKEND_URL)
     // console.log(formState.values.email)
     // console.log(formState.values.password)
-    const userData = {
+   var userData = {
       email: this.state.form.values.email,
-      password: this.state.values.password
+      password: this.state.form.values.password
     };
-    console.log(userData);
+    console.log('<><><><>',this.state.form.values);
 
     this.props.loginUser(userData);
     //history.push('/');
@@ -397,7 +408,8 @@ class SignIn extends Component {
                   <Button
                     className={classes.signInButton}
                     color="primary"
-                    disabled={!this.state.form.isValid}
+                    //disabled={!this.state.form.isValid}
+                    disabled={false}
                     fullWidth
                     size="large"
                     type="submit"
@@ -436,7 +448,7 @@ SignIn.propTypes = {
 };
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.form.errors
+  errors: state.errors
 });
 
 //export default withRouter(SignIn);
