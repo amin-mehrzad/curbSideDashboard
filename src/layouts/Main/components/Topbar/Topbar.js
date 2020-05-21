@@ -8,6 +8,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 
+import { logoutuser } from "../../../../actions/authActions";
+
+import { connect } from "react-redux";
+
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: 'none'
@@ -27,6 +31,12 @@ const Topbar = props => {
 
   const [notifications] = useState([]);
 
+   const onSignOutClick = e => {
+
+    e.preventDefault();
+    console.log(props)
+    props.logoutuser();
+  };
   return (
     <AppBar
       {...rest}
@@ -53,6 +63,7 @@ const Topbar = props => {
           <IconButton
             className={classes.signOutButton}
             color="inherit"
+            onClick={onSignOutClick}
           >
             <InputIcon />
           </IconButton>
@@ -72,7 +83,12 @@ const Topbar = props => {
 
 Topbar.propTypes = {
   className: PropTypes.string,
-  onSidebarOpen: PropTypes.func
+  onSidebarOpen: PropTypes.func,
+  logoutuser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-export default Topbar;
+export default connect(mapStateToProps,{ logoutuser}) (Topbar);

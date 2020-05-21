@@ -25,63 +25,63 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/dashboard"
+        to="/sign-in"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={DashboardView}
         exact
         layout={MainLayout}
         path="/dashboard"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={ProductListView}
         exact
         layout={MainLayout}
         path="/users"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={UserListView}
         exact
         layout={MainLayout}
         path="/products"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={TypographyView}
         exact
         layout={MainLayout}
         path="/typography"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={IconsView}
         exact
         layout={MainLayout}
         path="/icons"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={AccountView}
         exact
         layout={MainLayout}
         path="/account"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={SettingsView}
         exact
         layout={MainLayout}
         path="/settings"
       />
-      <PrivateRoute
+      <RouteWithLayout
         component={SignUpView}
         exact
         layout={MinimalLayout}
         path="/sign-up"
       />
-      <PrivateRoute
+      <RouteWithLayout
         component={SignInView}
         exact
         layout={MinimalLayout}
         path="/sign-in"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={NotFoundView}
         exact
         layout={MinimalLayout}

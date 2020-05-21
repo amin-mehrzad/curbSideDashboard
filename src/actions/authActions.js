@@ -80,8 +80,10 @@ export const setUserLoading = () => {
 
 
 // Log user out
-export const logoutUser = () => dispatch => {
+export const logoutuser = () => dispatch => {
     // Remove token from local storage
+
+    //console.log('here');
     localStorage.removeItem("jwtToken");
     // Remove auth header for future requests
     setAuthToken(false);

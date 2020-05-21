@@ -20,7 +20,7 @@ import store from "./store";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./actions/authActions";
+import { setCurrentUser, logoutuser } from "./actions/authActions";
 
 const browserHistory = createBrowserHistory();
 
@@ -47,7 +47,7 @@ if (localStorage.jwtToken) {
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
     // Logout user
-    store.dispatch(logoutUser());
+    store.dispatch(logoutuser());
     // Redirect to login
     window.location.href = "./sign-in";
   }

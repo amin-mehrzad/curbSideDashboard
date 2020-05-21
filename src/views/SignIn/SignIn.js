@@ -139,7 +139,7 @@ class SignIn extends Component {
     super();
     this.state = {
       form: {
-       // isValid: false,
+        isValid: false,
         values: {},
         touched: {},
         errors: {}
@@ -155,7 +155,7 @@ class SignIn extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
+      this.props.history.push("/dashboard");
     }
   }
 
@@ -220,7 +220,9 @@ class SignIn extends Component {
 
    // event.persist();
     console.log(this.state)
-  //  const formErrors = validate(this.state.form.values, schema);
+    
+    const formErrors = validate({...this.state.form.values,
+      [event.target.name]:event.target.value}, schema);
    // console.log(formErrors)
     this.setState({
       //...this.state.form,
@@ -236,8 +238,8 @@ class SignIn extends Component {
         ...this.state.form.touched,
         [event.target.name]: true
       },
-     // isValid: formErrors ? false : true,
-      errors:  {}
+      isValid: formErrors ? false : true,
+      errors: formErrors || {}
     }},()=>{
       console.log(this.state)
     });
@@ -246,9 +248,10 @@ class SignIn extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/"); // push user to dashboard when they login
+      this.props.history.push("/dashboard"); // push user to dashboard when they login
     }
     if (nextProps.errors) {
+      console.log('error',nextProps.errors)
       this.setState({
         form:{...this.state.form,
           errors: nextProps.errors}
@@ -321,9 +324,9 @@ class SignIn extends Component {
           >
             <div className={classes.content}>
               <div className={classes.contentHeader}>
-                <IconButton onClick={this.handleBack}>
+                {/* <IconButton onClick={this.handleBack}>
                   <ArrowBackIcon />
-                </IconButton>
+                </IconButton> */}
               </div>
               <div className={classes.contentBody}>
                 <form
@@ -408,8 +411,8 @@ class SignIn extends Component {
                   <Button
                     className={classes.signInButton}
                     color="primary"
-                    //disabled={!this.state.form.isValid}
-                    disabled={false}
+                    disabled={!this.state.form.isValid}
+                   // disabled={false}
                     fullWidth
                     size="large"
                     type="submit"
