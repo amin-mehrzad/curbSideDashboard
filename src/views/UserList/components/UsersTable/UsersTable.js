@@ -4,20 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
-// import {
-//   Card,
-//   CardActions,
-//   CardContent,
-//   Avatar,
-//   Checkbox,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableRow,
-//   Typography,
-//   TablePagination
-// } from '@material-ui/core';
+
 import { Input } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
@@ -46,30 +33,17 @@ import setAuthToken from '../../../../utils/setAuthToken';
 
 
 export default function MaterialTableDemo() {
-  // const getdata=()=>{
-  //   setAuthToken(`Bearer ${localStorage.jwtToken}`);
-  //   return axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
-  //   .then(res => {
-  //     console.log('rate numbers-->', res.data.data);
-  //     console.log('data-->', res.data.data[0]);
-  //     const data = res.data.data;
-  //     //const total = res.data.data[0].metadata[0].total;
-  //     console.log(data)
-  //    // if(state.data)
-  //   //  setState({...state,data: data});
-  //   //  data;
-  //   //  return data
-  //   })
-  //   .catch(err => console.log(err))
-  // }
+
+  var tempFormData = new FormData()
+  const [formData, setFormData] = React.useState(tempFormData)
 
   const [state, setState] = React.useState({
     columns: [
       {
-        field: 'url',
+        field: 'imageUrl',
         title: 'Picture',
-        render: rowData => <img src={rowData.imageUrl} style={{ width: 30, height: 30, borderRadius: '20%' }} />,
-        editComponent: props => <input type="file" id="img" name="img" accept="image/*" />
+        render: rowData => <img src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${rowData.imageUrl}`} style={{ width: 30, height: 30, borderRadius: '20%' }} />,
+        editComponent: props => <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onChange={handleInputChange} />
       },
       { title: 'Name', field: 'name' },
       { title: 'Price', field: 'price', type: 'numeric' },
@@ -102,7 +76,7 @@ export default function MaterialTableDemo() {
     data: []
   })
 
-  // });
+
 
   useEffect(async () => {
     setAuthToken(`Bearer ${localStorage.jwtToken}`);
@@ -111,6 +85,19 @@ export default function MaterialTableDemo() {
     console.log(data.data.data)
     setState({ ...state, data: data.data.data });
   }, []);
+
+
+  const handleInputChange = (event) => {
+
+    console.log(event.target.files[0])
+
+
+    console.log(formData)
+
+    tempFormData = formData
+    tempFormData.set('imageUrl', event.target.files[0])
+    setFormData(tempFormData)
+  }
 
 
   const tableIcons = {
@@ -143,32 +130,98 @@ export default function MaterialTableDemo() {
         onRowAdd: (newData) =>
 
           new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/products`, newData)
+            tempFormData = formData
+            tempFormData.set('name', newData.name)
+            tempFormData.set('price', newData.price)
+            tempFormData.set('qty', newData.qty)
+            tempFormData.set('tax', newData.tax)
+            tempFormData.set('featured', newData.featured)
+            tempFormData.set('barcode', newData.barcode)
+            tempFormData.set('category', newData.category)
+            tempFormData.set('active', newData.active)
 
-                data.push(newData);
-                return { ...prevState, data };
+            console.log(tempFormData)
+
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/products`, tempFormData)
+              .then(function (response) {
+                // handle success
+                console.log(response);
+
+                for (let pair of tempFormData.entries()) {
+                  console.log(pair[0] + ': ' + pair[1]);
+                }
+                setTimeout(() => {
+                  resolve();
+
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    console.log(newData)
+                    data.push({ ...response.data.result, imageUrl: response.data.result.imageUrl });
+                    console.log(formData)
+
+                    return { ...prevState, data };
+                  });
+                }, 1600);
+
+
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .then(function () {
+                // always executed
               });
-            }, 600);
+
+
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
+            console.log(newData)
+            console.log(oldData)
+            console.log(formData.get('imageUrl'))
 
-                setState((prevState) => {
-                  const data = [...prevState.data];
+            if (oldData) {
+              if (formData.get('imageUrl') != null) {
+                var tempData = formData
+                tempData.set('name', newData.name)
+                tempData.set('price', newData.price)
+                tempData.set('qty', newData.qty)
+                tempData.set('tax', newData.tax)
+                tempData.set('featured', newData.featured)
+                tempData.set('barcode', newData.barcode)
+                tempData.set('category', newData.category)
+                tempData.set('active', newData.active)
 
-                  axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/products/${oldData._id}`, newData)
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
+                for (let pair of tempData.entries()) {
+                  console.log(pair[0] + ': ' + pair[1]);
+                }
+              } else {
+                var tempData = newData
               }
-            }, 600);
+              console.log(tempData)
+
+              axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/products/${oldData._id}`, tempData)
+                .then(function (response) {
+                  console.log(response.data.result)
+
+
+                  setTimeout(() => {
+
+                    var tempFormData = new FormData()
+                    setFormData(tempFormData);
+
+                    resolve();
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = response.data.result;
+                      return { ...prevState, data };
+                    });
+
+
+                  }, 600);
+                })
+            }
           }),
         onRowDelete: (oldData) =>
           new Promise((resolve) => {
