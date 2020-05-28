@@ -15,6 +15,12 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import compose from 'recompose/compose'
+
+
 const schema = {
   firstName: {
     presence: { allowEmpty: false, message: 'is required' },
@@ -187,7 +193,13 @@ const SignUp = props => {
 
   const handleSignUp = event => {
     event.preventDefault();
-    history.push('/');
+
+   // const newUser = 
+    console.log(formState);
+
+    props.registerUser(formState.values, history);
+
+//    history.push('/');
   };
 
   const hasError = field =>
@@ -379,7 +391,18 @@ const SignUp = props => {
 };
 
 SignUp.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
+
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default withRouter(SignUp);
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+export default compose(
+  // withStyles(useStyles),
+  connect(mapStateToProps, { registerUser })
+)(withRouter(SignUp))

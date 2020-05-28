@@ -37,6 +37,19 @@ export default function MaterialTableDemo() {
   var tempFormData = new FormData()
   const [formData, setFormData] = React.useState(tempFormData)
 
+
+  setAuthToken(`Bearer ${localStorage.jwtToken}`);
+
+  var categoryList = {}
+  const categories =  axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
+  .then((response)=>{
+    response.data.data.forEach((element, index) => {
+    categoryList[index] = element.categoryName
+  })
+})
+  // var columnsData = state.columns
+  // columnsData[6] = { title: 'Category', field: 'category', lookup: categoryList }
+  // console.log(columnsData)
   const [state, setState] = React.useState({
     columns: [
       {
@@ -57,7 +70,7 @@ export default function MaterialTableDemo() {
       { title: 'Barcode', field: 'barcode' },
 
       {
-        title: 'Category', field: 'category', lookup: {   }
+        title: 'Category', field: 'category', lookup: categoryList
       },
       {
         title: 'Featured',
@@ -75,30 +88,47 @@ export default function MaterialTableDemo() {
 
 
 
-  useEffect( () => {
-    async function fetchData(){
-    setAuthToken(`Bearer ${localStorage.jwtToken}`);
-    const categories = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
-.then(async (response)=>{
-  const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
-  console.log(data.data.data)
-  var categoryList={}
-  response.data.data.forEach(  (element,index) =>{
-    categoryList[index] = element.categoryName
-  } )
-  var columnsData=state.columns
-  columnsData[6]=  {title: 'Category', field: 'category', lookup: categoryList} 
-  setState({ data: data.data.data ,columns: columnsData});
-  
-})
-    // const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
-    // console.log(data.data.data)
-    // setState({ ...state, data: data.data.data });
+  useEffect(() => {
+    async function fetchCategory() {
+      setAuthToken(`Bearer ${localStorage.jwtToken}`);
+     // const categories = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
+      //         .then( (response) => {
+      //           var categoryList = {}
+      //           response.data.data.forEach((element, index) => {
+      //             categoryList[index] = element.categoryName
+      //           })
+      //           async function fetchProducts(){
+      //           const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
+      //           console.log(data.data.data)
+
+      //           var columnsData = state.columns
+      //           columnsData[6] = { title: 'Category', field: 'category', lookup: categoryList }
+
+      //           setState({ data: data.data.data, columns: columnsData });
+      // }
+      // fetchProducts()
+
+      //         })
+
+      //console.log(categories)
+      
+     // console.log(categoryList)
+
+      // var columnsData = state.columns
+      // columnsData[6] = { title: 'Category', field: 'category', lookup: categoryList }
+      // console.log(columnsData)
+      const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
+      console.log(data.data.data)
+     // setState({ data: data.data.data, columns: columnsData })
+      setState({ ...state,data: data.data.data})
+     // .then(console.log(state));
+
+
     }
-    fetchData()
+    fetchCategory()
   }, []);
 
-console.log(state)
+  console.log(state)
   const handleInputChange = (event) => {
 
     console.log(event.target.files[0])
@@ -139,10 +169,10 @@ console.log(state)
       icons={tableIcons}
       options={{
         pageSize: 10,
-        pageSizeOptions: [5, 10, 20, 30 ,50, 75, 100 ],
+        pageSizeOptions: [5, 10, 20, 30, 50, 75, 100],
         toolbar: true,
         paging: true
-    }}
+      }}
       editable={{
 
         onRowAdd: (newData) =>
@@ -180,8 +210,6 @@ console.log(state)
                     return { ...prevState, data };
                   });
                 }, 1600);
-
-
               })
               .catch(function (error) {
                 // handle error
@@ -190,8 +218,6 @@ console.log(state)
               .then(function () {
                 // always executed
               });
-
-
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve) => {
