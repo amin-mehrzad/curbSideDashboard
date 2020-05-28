@@ -55,12 +55,9 @@ export default function MaterialTableDemo() {
         lookup: { 0: 'No', 1: 'Yes' },
       },
       { title: 'Barcode', field: 'barcode' },
+
       {
-        title: 'Category', field: 'category', lookup: {
-          0: 'Catogory 1',
-          1: 'Category 2',
-          2: 'Category 3'
-        }
+        title: 'Category', field: 'category', lookup: {   }
       },
       {
         title: 'Featured',
@@ -78,15 +75,30 @@ export default function MaterialTableDemo() {
 
 
 
-  useEffect(async () => {
+  useEffect( () => {
+    async function fetchData(){
     setAuthToken(`Bearer ${localStorage.jwtToken}`);
-
-    const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
-    console.log(data.data.data)
-    setState({ ...state, data: data.data.data });
+    const categories = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
+.then(async (response)=>{
+  const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
+  console.log(data.data.data)
+  var categoryList={}
+  response.data.data.forEach(  (element,index) =>{
+    categoryList[index] = element.categoryName
+  } )
+  var columnsData=state.columns
+  columnsData[6]=  {title: 'Category', field: 'category', lookup: categoryList} 
+  setState({ data: data.data.data ,columns: columnsData});
+  
+})
+    // const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/products`)
+    // console.log(data.data.data)
+    // setState({ ...state, data: data.data.data });
+    }
+    fetchData()
   }, []);
 
-
+console.log(state)
   const handleInputChange = (event) => {
 
     console.log(event.target.files[0])
@@ -125,6 +137,12 @@ export default function MaterialTableDemo() {
       columns={state.columns}
       data={state.data}
       icons={tableIcons}
+      options={{
+        pageSize: 10,
+        pageSizeOptions: [5, 10, 20, 30 ,50, 75, 100 ],
+        toolbar: true,
+        paging: true
+    }}
       editable={{
 
         onRowAdd: (newData) =>
