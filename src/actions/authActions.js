@@ -13,7 +13,7 @@ import formurlencoded from 'form-urlencoded';
 // Register User
 export const registerUser = (userData, history) => dispatch => {
     axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/API/users/register`, formurlencoded(userData), {
+        .post(`${process.env.REACT_APP_BACKEND_URL}/users/register`, formurlencoded(userData), {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
@@ -33,7 +33,7 @@ export const loginUser = userData => dispatch => {
     console.log(userData);
     console.log("userData");
     axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/API/users/authenticate`, formurlencoded(userData), {
+        .post(`${process.env.REACT_APP_BACKEND_URL}/users/authenticate`, formurlencoded(userData), {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }

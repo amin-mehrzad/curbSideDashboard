@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
 const CategoryList = () => {
   const classes = useStyles();
 
-  const [users] = useState(mockData);
+  //const [users] = useState(mockData);
+  const [users] = []
 
   return (
     <div className={classes.root}>
