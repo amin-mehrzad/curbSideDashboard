@@ -17,6 +17,8 @@ import statesData from './statesData'
 import Axios from 'axios';
 import setAuthToken from '../../../../utils/setAuthToken'
 
+import AccountProfile from "../AccountProfile/AccountProfile";
+
 import {Alert} from '@material-ui/lab';
 
 const useStyles = makeStyles(() => ({

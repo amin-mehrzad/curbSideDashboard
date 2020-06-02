@@ -27,11 +27,10 @@ const Profile = props => {
   const classes = useStyles();
 
   const user = {
-    name: 'Shen Zhi',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director'
+    name: localStorage.profileName,
+    avatar: `${process.env.REACT_APP_BACKEND_URL}/uploads/businessLogos/${localStorage.profileImage}`,
+    bio: 'Administrator'
   };
-
   return (
     <div
       {...rest}

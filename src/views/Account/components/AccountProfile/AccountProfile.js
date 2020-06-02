@@ -45,7 +45,19 @@ const AccountProfile = props => {
   const [businessLogo, setBusinessLogo] = useState("")
   const classes = useStyles();
 
+
+  const changeProgress = (profileData)=>{
+    var incompleteProps = 0
+    for (var profileProp in profileData) {
+      if (profileData[profileProp] === "" || profileData[profileProp] === null)
+        incompleteProps += 10
+      console.log(incompleteProps)
+    }
+    if (profileProgress != 100 - incompleteProps)
+      setProfileProgress(100 - incompleteProps)
+  }
   useEffect(() => {
+
     async function fetchProfileInfo() {
 
       setAuthToken(`Bearer ${localStorage.jwtToken}`);
@@ -54,16 +66,18 @@ const AccountProfile = props => {
       setBusinessLogo(websiteInfo.data)
       console.log(websiteInfo)
       var profileInformation = websiteInfo.data
-      var incompleteProps = 0
-      for (var profileProp in profileInformation) {
-        if (profileInformation[profileProp] === "")
-          incompleteProps += 10
 
 
-        console.log(incompleteProps)
-      }
+      // var incompleteProps = 0
+      // for (var profileProp in profileInformation) {
+      //   if (profileInformation[profileProp] === "" || profileInformation[profileProp] === null)
+      //     incompleteProps += 10
+      //   console.log(incompleteProps)
+      // }
+      // if (profileProgress != 100 - incompleteProps)
+      //   setProfileProgress(100 - incompleteProps)
+      changeProgress(profileInformation)
 
-      setProfileProgress(100 - incompleteProps)
 
     }
     fetchProfileInfo()
@@ -84,6 +98,7 @@ const AccountProfile = props => {
 
 
         setBusinessLogo(response.data)
+        changeProgress(response.data)
 
       })
   }
@@ -91,16 +106,18 @@ const AccountProfile = props => {
   const handleRemove = event => {
     event.preventDefault();
     var payload = businessLogo
-    payload={...payload,businessLogoUrl:""}
+    payload = { ...payload, businessLogoUrl: "" }
 
     console.log(payload)
     Axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/websites`, payload)
-    .then((response) => {
+      .then((response) => {
         console.log(response)
         setBusinessLogo(response.data)
-  })
+        changeProgress(response.data)
 
-}
+      })
+
+  }
 
   console.log(businessLogo)
 
