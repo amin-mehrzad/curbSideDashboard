@@ -12,6 +12,8 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
+import ListAltIcon from '@material-ui/icons/ListAlt';
+
 import { Profile, SidebarNav, UpgradePlan } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +56,11 @@ const Sidebar = props => {
     //   icon: <PeopleIcon />
     // },
     {
+      title: 'Orders',
+      href: '/orders',
+      icon: <ListAltIcon />
+    },
+    {
       title: 'Products',
       href: '/products',
       icon: <ShoppingBasketIcon />
@@ -63,6 +70,8 @@ const Sidebar = props => {
       href: '/Categories',
       icon: <ViewList />
     },
+
+
     // {
     //   title: 'Authentication',
     //   href: '/sign-in',
