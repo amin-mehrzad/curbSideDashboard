@@ -5,7 +5,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 
-import { Input,Table,TableBody,TableRow,TableCell,TableHead,Paper,Grid } from '@material-ui/core';
+import { Input, Table, TableBody, TableRow, TableCell, TableHead, Paper, Grid } from '@material-ui/core';
 
 import { getInitials } from 'helpers';
 
@@ -31,19 +31,42 @@ import {
 import axios from 'axios';
 import setAuthToken from '../../../../utils/setAuthToken';
 
+import socketIOClient from "socket.io-client";
+
+const useStyles = makeStyles(theme => ({
+  headCell: {
+    backgroundColor: '#546E7A',
+    color: '#FFFFFF'
+  },
+  bodyCell: {
+    backgroundColor: '#FFFFFF',
+  },
+  itemsTable: {
+    border: 'solid 2px #546E7A',
+  }
+}))
 
 export default function MaterialTableDemo() {
 
+  const classes = useStyles();
+
+  const [response, setResponse] = React.useState("");
   const [state, setState] = React.useState({
     columns: [
       { title: 'Order ID', field: 'orderID' },
       { title: 'Order Number', field: 'orderNumber' },
       { title: 'Order SubTotal', field: 'orderSubTotal', type: 'numeric' },
+      { title: 'Order State', field: 'orderState', },
     ],
     data: []
   })
 
   useEffect(() => {
+    const socket = socketIOClient(process.env.REACT_APP_BACKEND_URL);
+    socket.on("NewOrder", data => {
+      setResponse(data);
+    });
+
     async function fetchData() {
       setAuthToken(`Bearer ${localStorage.jwtToken}`);
       const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/orders`)
@@ -73,56 +96,64 @@ export default function MaterialTableDemo() {
   };
   return (
     <MaterialTable
-      title="Orders"
+      // title= {"Orders"}
+      title= {response.orderNumber} /////////////////////////////////////////////////////////////////// TODO use this method
       columns={state.columns}
       data={state.data}
       icons={tableIcons}
       detailPanel={rowData => {
         return (
-          <div
-            // style={{
-            //   fontSize: 14,
-            //   textAlign: 'center',
-            //   color: 'black',
-            //   backgroundColor: 'white',
-            // }}
-          >
-            {/* <div>{rowData.orderID} </div><br/> */}
-            <Grid container spacing={3}>
-            <Grid item >
+          // <div
+          //   // style={{
+          //   //   fontSize: 14,
+          //   //   textAlign: 'center',
+          //   //   color: 'black',
+          //   //   backgroundColor: 'white',
+          //   // }}
+          // >
+          //  {/* <div>{rowData.orderID} </div><br/> */}
+          // <Grid container spacing={2} >
+          // <Grid item >
+          <Grid  >
 
-            <Paper>
-            <Table size="small">
-            <TableHead>
+            <Paper style={{
+              padding: 20,
+              display: 'flex',
+              overflow: 'auto',
+              flexDirection: 'column',
+              backgroundColor: '#F5F5F5'
+            }}>
+              <Table size="small" className={classes.itemsTable} >
+                <TableHead >
                   <TableRow >
-                    <TableCell align="left" style={{ minWidth: '135px' }} >Product ID</TableCell>
-                    <TableCell align="left">Qty Ordered</TableCell>
-                    <TableCell align="left">Qty Shipped</TableCell>
-                    <TableCell align="left">Qty Cancelled</TableCell>
-                    <TableCell align="left" style={{ minWidth: '215px' }}>Sold Price</TableCell>
-                    <TableCell align="left">Price</TableCell>
+                    <TableCell className={classes.headCell} align="left" style={{ minWidth: '135px' }} >Product ID</TableCell>
+                    <TableCell align="left" className={classes.headCell} >Qty Ordered</TableCell>
+                    <TableCell align="left" className={classes.headCell} >Qty Shipped</TableCell>
+                    <TableCell align="left" className={classes.headCell} >Qty Cancelled</TableCell>
+                    <TableCell align="left" className={classes.headCell} style={{ minWidth: '215px' }}>Sold Price</TableCell>
+                    <TableCell align="left" className={classes.headCell} >Price</TableCell>
                   </TableRow>
                 </TableHead>
-            <TableBody>
+                <TableBody>
 
-            {rowData.orderItems.map((row, index) => (
+                  {rowData.orderItems.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell align="left" style={{ minWidth: '135px' }}>{row.productId}</TableCell>
-                      <TableCell align="left">{row.qty.ordered}</TableCell>
-                      <TableCell align="left">{row.qty.shipped}</TableCell>
-                      <TableCell align="left">{row.qty.cancelled}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell} style={{ minWidth: '135px' }} >{row.productId}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell} >{row.qty.ordered}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell} >{row.qty.shipped}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell} >{row.qty.cancelled}</TableCell>
                       {/* <TableCell align="left" style={{ minWidth: '215px' }}>{moment(rowData.orderStatusHistory[rowData.orderStatusHistory.length -1 ]).tz('America/Los_Angeles').format('MMMM DD, YYYY - HH:mm:ss')}</TableCell> */}
-                      <TableCell align="left">{row.soldPrice}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell}>{row.soldPrice}</TableCell>
+                      <TableCell align="left" className={classes.bodyCell} >{row.price}</TableCell>
                     </TableRow>
                   ))}
-                   </TableBody>
-                   </Table>
-                   </Paper>
-                   </Grid >
+                </TableBody>
+              </Table>
+            </Paper>
+          </Grid >
 
-                   </Grid>
-          </div>
+          //  </Grid>
+          // </div>
         )
       }}
       onRowClick={(event, rowData, togglePanel) => togglePanel()}
@@ -130,15 +161,15 @@ export default function MaterialTableDemo() {
         onRowAdd: (newData) =>
           new Promise((resolve) => {
             axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/orders`, newData)
-              .then(function (response) {
+              .then(function (resp) {
                 // handle success
-                console.log(response);
+                console.log(resp);
                 setTimeout(() => {
                   resolve();
                   setState((prevState) => {
                     const data = [...prevState.data];
                     console.log(newData)
-                    data.push(response.data.result);
+                    data.unshift(resp.data.result);
                     return { ...prevState, data };
                   });
                 }, 1600);
@@ -157,14 +188,14 @@ export default function MaterialTableDemo() {
             if (oldData) {
 
               axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/orders/${oldData._id}`, newData)
-                .then(function (response) {
-                  console.log(response.data.result)
+                .then(function (resp) {
+                  console.log(resp.data.result)
                   setTimeout(() => {
 
                     resolve();
                     setState((prevState) => {
                       const data = [...prevState.data];
-                      data[data.indexOf(oldData)] = response.data.result;
+                      data[data.indexOf(oldData)] = resp.data.result;
                       return { ...prevState, data };
                     });
 
