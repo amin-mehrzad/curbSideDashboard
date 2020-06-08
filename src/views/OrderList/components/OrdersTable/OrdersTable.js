@@ -55,6 +55,7 @@ export default function MaterialTableDemo() {
     columns: [
       { title: 'Order ID', field: 'orderID' },
       { title: 'Order Number', field: 'orderNumber' },
+      { title: 'Order Created Time', field: 'orderCreatedTime' },
       { title: 'Order SubTotal', field: 'orderSubTotal', type: 'numeric' },
       { title: 'Order State', field: 'orderState', },
     ],
@@ -65,6 +66,7 @@ export default function MaterialTableDemo() {
     const socket = socketIOClient(process.env.REACT_APP_BACKEND_URL);
     socket.on("NewOrder", data => {
       setResponse(data);
+      fetchData()
     });
 
     async function fetchData() {
@@ -96,8 +98,8 @@ export default function MaterialTableDemo() {
   };
   return (
     <MaterialTable
-      // title= {"Orders"}
-      title= {response.orderNumber} /////////////////////////////////////////////////////////////////// TODO use this method
+      title= {"Orders"}
+      //title= {response.orderNumber} /////////////////////////////////////////////////////////////////// TODO use this method
       columns={state.columns}
       data={state.data}
       icons={tableIcons}
