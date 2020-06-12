@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import { UsersToolbar, OrdersTable } from './components';
+import { ProductsToolbar, OrdersTable } from './components';
 import mockData from './data';
 
 const useStyles = makeStyles(theme => ({
@@ -21,7 +21,7 @@ const OrderList = () => {
 
   return (
     <div className={classes.root}>
-      {/* <UsersToolbar /> */}
+      {/* <ProductsToolbar /> */}
       <div className={classes.content}>
         <OrdersTable users={users} />
       </div>

@@ -9,7 +9,7 @@ import {
   //ProductList as ProductListView,
   CategoryList as CategoryListView,
   OrderList as OrderListView,
-  UserList as UserListView,
+  ProductList as ProductListView,
   Typography as TypographyView,
   Icons as IconsView,
   Account as AccountView,
@@ -42,7 +42,7 @@ const Routes = () => {
         path="/users"
       /> */}
       <PrivateRoute
-        component={UserListView}
+        component={ProductListView}
         exact
         layout={MainLayout}
         path="/products"

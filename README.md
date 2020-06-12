@@ -84,7 +84,7 @@ material-react-dashboard
 	│	├── SignIn
 	│	├── SignUp
 	│	├── Typography
-	│	└── UserList
+	│	└── ProductList
 	├── App.jsx
 	├── index.jsx
 	└── Routes.jsx

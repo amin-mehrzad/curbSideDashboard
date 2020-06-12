@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UsersToolbar = props => {
+const ProductsToolbar = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -59,8 +59,8 @@ const UsersToolbar = props => {
   );
 };
 
-UsersToolbar.propTypes = {
+ProductsToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersToolbar;
+export default ProductsToolbar;
