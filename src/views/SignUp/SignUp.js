@@ -166,6 +166,8 @@ const SignUp = props => {
       isValid: errors ? false : true,
       errors: errors || {}
     }));
+
+    console.log(formState)
   }, [formState.values]);
 
   const handleChange = event => {
