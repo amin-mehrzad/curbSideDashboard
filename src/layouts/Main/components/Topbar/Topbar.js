@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -11,6 +11,8 @@ import InputIcon from '@material-ui/icons/Input';
 import { logoutuser } from "../../../../actions/authActions";
 
 import { connect } from "react-redux";
+
+import socketIOClient from "socket.io-client";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +32,26 @@ const Topbar = props => {
   const classes = useStyles();
 
   const [notifications] = useState([]);
+  // const [newOrder, setNewOrder] = useState([]);
+
+
+  // useEffect(() => {
+  //   const socket = socketIOClient(process.env.REACT_APP_BACKEND_URL);
+  //   socket.on("NewOrder", data => {
+  //     var tempData=  newOrder
+  //     tempData.unshift(data)
+  //     // setNewOrder(prevData=>{
+  //     //   console.log(prevData)
+
+  //     //   return {...prevData, data };
+  //     // });
+  //     setNewOrder(tempData)
+  //     // badgeContent={newOrder.length}
+  //     console.log(newOrder.length)
+
+  //   });
+  // },[])
+
 
    const onSignOutClick = e => {
 
@@ -56,6 +78,7 @@ const Topbar = props => {
         <Hidden mdDown>
           <IconButton color="inherit">
             <Badge
+             // badgeContent={newOrder.length}
               badgeContent={notifications.length}
               color="primary"
               variant="dot"

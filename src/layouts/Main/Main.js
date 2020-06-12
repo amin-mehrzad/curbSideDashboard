@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
 
 import { Sidebar, Topbar, Footer } from './components';
+
+import { useSnackbar } from 'notistack';
+import socketIOClient from "socket.io-client";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +35,27 @@ const Main = props => {
     defaultMatches: true
   });
 
+  const { enqueueSnackbar,closeSnackbar  } = useSnackbar();
+
+const [newOrder, setNewOrder] = useState([]);
+
+
+useEffect(() => {
+  const socket = socketIOClient(process.env.REACT_APP_BACKEND_URL);
+  socket.on("NewOrder", newOrderData => {
+    var tempData=  newOrder
+    tempData.unshift(newOrderData)
+    setNewOrder(tempData)
+    console.log(newOrder)
+    enqueueSnackbar(`New Order Recieved! OrderID: ${newOrder[0].orderID}`,{ 
+      variant: 'info',
+      autoHideDuration: 10000,
+
+  });
+
+  });
+},[])
+
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const handleSidebarOpen = () => {
@@ -44,6 +69,7 @@ const Main = props => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   return (
+
     <div
       className={clsx({
         [classes.root]: true,
@@ -61,6 +87,7 @@ const Main = props => {
         <Footer />
       </main>
     </div>
+
   );
 };
 

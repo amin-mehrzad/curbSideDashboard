@@ -22,6 +22,14 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutuser } from "./actions/authActions";
 
+
+
+
+import { SnackbarProvider } from 'notistack';
+
+
+
+
 const browserHistory = createBrowserHistory();
 
 Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
@@ -55,8 +63,12 @@ if (localStorage.jwtToken) {
 
 
 export default class App extends Component {
+  
   render() {
+
     return (
+      <SnackbarProvider maxSnack={10} hideIconVariant>
+
       <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Router history={browserHistory}>
@@ -64,6 +76,7 @@ export default class App extends Component {
         </Router>
       </ThemeProvider>
       </Provider>
+      </SnackbarProvider>
 
     );
   }
