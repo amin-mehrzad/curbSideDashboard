@@ -11,7 +11,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 
 import { Profile, SidebarNav, UpgradePlan } from './components';
@@ -50,11 +50,7 @@ const Sidebar = props => {
       href: '/dashboard',
       icon: <DashboardIcon />
     },
-    // {
-    //   title: 'Users',
-    //   href: '/users',
-    //   icon: <PeopleIcon />
-    // },
+
     {
       title: 'Orders',
       href: '/orders',
@@ -91,6 +87,11 @@ const Sidebar = props => {
       title: 'Account',
       href: '/account',
       icon: <AccountBoxIcon />
+    },
+    {
+      title: 'Users',
+      href: '/users',
+      icon: <GroupAddIcon />
     },
     {
       title: 'Settings',
