@@ -61,6 +61,7 @@ export default function MaterialTableDemo() {
       { title: 'First Name', field: 'firstName' },
       { title: 'Last Name', field: 'lastName'},
       { title: 'Email', field: 'email'},
+      // { title: 'Password', field: 'password'},
 
       // {
       //   title: 'Tax',
@@ -70,7 +71,7 @@ export default function MaterialTableDemo() {
       // { title: 'Barcode', field: 'barcode' },
 
       {
-        title: 'permission', field: 'category', lookup: categoryList
+        title: 'permissions', field: 'permissions', lookup: categoryList
       },
       // {
       //   title: 'Featured',
@@ -92,7 +93,7 @@ export default function MaterialTableDemo() {
     async function fetchCategory() {
       setAuthToken(`Bearer ${localStorage.jwtToken}`);
   
-      const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/users`)
+      const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers`)
       console.log(data.data.data)
       setState({ ...state,data: data.data.data})
 
@@ -148,7 +149,7 @@ export default function MaterialTableDemo() {
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
-            axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/users`, newData)
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers`, newData)
               .then(function (response) {
                 // handle success
                 console.log(response);
@@ -157,7 +158,7 @@ export default function MaterialTableDemo() {
                   setState((prevState) => {
                     const data = [...prevState.data];
                     console.log(newData)
-                    data.push(response.data.result);
+                    data.push(response.data.data);
                     return { ...prevState, data };
                   });
                 }, 1600);
@@ -175,7 +176,7 @@ export default function MaterialTableDemo() {
 
             if (oldData) {
 
-              axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/users/${oldData._id}`, newData)
+              axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/${oldData._id}`, newData)
                 .then(function (response) {
                   console.log(response.data.result)
                   setTimeout(() => {
@@ -203,7 +204,7 @@ export default function MaterialTableDemo() {
               console.log(oldData)
               setState((prevState) => {
                 const data = [...prevState.data];
-                axios.delete(`${process.env.REACT_APP_BACKEND_URL}/API/users/${oldData._id}`)
+                axios.delete(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/${oldData._id}`)
                 data.splice(data.indexOf(oldData), 1);
                 return { ...prevState, data };
               });
