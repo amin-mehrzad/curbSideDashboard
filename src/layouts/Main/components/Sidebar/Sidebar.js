@@ -13,6 +13,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+//import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 import { Profile, SidebarNav, UpgradePlan } from './components';
 
@@ -93,6 +94,11 @@ const Sidebar = props => {
       href: '/users',
       icon: <GroupAddIcon />
     },
+    // {
+    //   title: 'User Permissions',
+    //   href: '/permissions',
+    //   icon: <LockOpenIcon />
+    // },
     {
       title: 'Settings',
       href: '/settings',

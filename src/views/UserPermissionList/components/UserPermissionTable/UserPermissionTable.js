@@ -1,13 +1,13 @@
-import React, { forwardRef, useState, useEffect } from 'react';
-// import clsx from 'clsx';
-// import PropTypes from 'prop-types';
-// import moment from 'moment';
-// import PerfectScrollbar from 'react-perfect-scrollbar';
-// import { makeStyles } from '@material-ui/styles';
+import React, { forwardRef, useEffect } from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { makeStyles } from '@material-ui/styles';
 
-// import { Input } from '@material-ui/core';
+import { Input } from '@material-ui/core';
 
-// import { getInitials } from 'helpers';
+import { getInitials } from 'helpers';
 
 import MaterialTable from 'material-table';
 import {
@@ -34,91 +34,24 @@ import setAuthToken from '../../../../utils/setAuthToken';
 
 export default function MaterialTableDemo() {
 
-  var tempFormData = new FormData()
-  const [formData, setFormData] = React.useState(tempFormData)
-
-
-  setAuthToken(`Bearer ${localStorage.jwtToken}`);
-
-  var categoryList = {}
-  const categories = axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
-    .then((response) => {
-      response.data.data.forEach((element, index) => {
-        categoryList[index] = element.categoryName
-      })
-    })
-  // var columnsData = state.columns
-  // columnsData[6] = { title: 'Category', field: 'category', lookup: categoryList }
-  // console.log(columnsData)
   const [state, setState] = React.useState({
     columns: [
-      // {
-      //   field: 'imageUrl',
-      //   title: 'Picture',
-      //   render: rowData => <img src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${rowData.imageUrl}`} style={{ width: 30, height: 30, borderRadius: '20%' }} />,
-      //   editComponent: props => <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onChange={handleInputChange} />
-      // },
-      { title: 'First Name', field: 'firstName' },
-      { title: 'Last Name', field: 'lastName' },
-      { title: 'Email', field: 'email' },
-      {
-        title: 'Password',
-        field: 'password',
-        render: rowData => <div><span>*********</span></div>,
-      },
-
-      // {
-      //   title: 'Tax',
-      //   field: 'tax',
-      //   lookup: { 0: 'No', 1: 'Yes' },
-      // },
-      // { title: 'Barcode', field: 'barcode' },
-
-      {
-        title: 'permissions', field: 'permissions', lookup: categoryList
-      },
-      // {
-      //   title: 'Featured',
-      //   field: 'featured',
-      //   lookup: { 0: 'No', 1: 'Yes' },
-      // },
-      // {
-      //   title: 'Active',
-      //   field: 'active',
-      //   lookup: { 0: 'No', 1: 'Yes' },
-      // },
+      { title: 'Category Name', field: 'categoryName' },
+      { title: 'Category Description', field: 'categoryDescription' },
+      { title: 'Sort Order', field: 'sortOrder', type: 'numeric' },
     ],
     data: []
   })
 
-
-
   useEffect(() => {
-    async function fetchCategory() {
+    async function fetchData() {
       setAuthToken(`Bearer ${localStorage.jwtToken}`);
-
-      const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers`)
+      const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
       console.log(data.data.data)
-      setState({ ...state, data: data.data.data })
-
+      setState({ ...state, data: data.data.data });
     }
-    fetchCategory()
+    fetchData()
   }, []);
-
-  console.log(state)
-  const handleInputChange = (event) => {
-
-    console.log(event.target.files[0])
-
-
-    console.log(formData)
-
-    tempFormData = formData
-    tempFormData.set('imageUrl', event.target.files[0])
-    setFormData(tempFormData)
-  }
-
-
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -140,20 +73,14 @@ export default function MaterialTableDemo() {
   };
   return (
     <MaterialTable
-      title="Users"
+      title="Categories"
       columns={state.columns}
       data={state.data}
       icons={tableIcons}
-      options={{
-        pageSize: 10,
-        pageSizeOptions: [5, 10, 20, 30, 50, 75, 100],
-        toolbar: true,
-        paging: true
-      }}
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
-            axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers`, newData)
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/categories`, newData)
               .then(function (response) {
                 // handle success
                 console.log(response);
@@ -162,7 +89,7 @@ export default function MaterialTableDemo() {
                   setState((prevState) => {
                     const data = [...prevState.data];
                     console.log(newData)
-                    data.push(response.data.data);
+                    data.push(response.data.result);
                     return { ...prevState, data };
                   });
                 }, 1600);
@@ -180,7 +107,7 @@ export default function MaterialTableDemo() {
 
             if (oldData) {
 
-              axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/${oldData._id}`, newData)
+              axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/categories/${oldData._id}`, newData)
                 .then(function (response) {
                   console.log(response.data.result)
                   setTimeout(() => {
@@ -208,7 +135,7 @@ export default function MaterialTableDemo() {
               console.log(oldData)
               setState((prevState) => {
                 const data = [...prevState.data];
-                axios.delete(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/${oldData._id}`)
+                axios.delete(`${process.env.REACT_APP_BACKEND_URL}/API/categories/${oldData._id}`)
                 data.splice(data.indexOf(oldData), 1);
                 return { ...prevState, data };
               });

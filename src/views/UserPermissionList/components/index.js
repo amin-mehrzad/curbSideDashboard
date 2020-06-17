@@ -1,0 +1,1 @@
+export { default as UserPermissionTable } from './UserPermissionTable';
