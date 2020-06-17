@@ -41,7 +41,7 @@ export default function MaterialTableDemo() {
   setAuthToken(`Bearer ${localStorage.jwtToken}`);
 
   var categoryList = {}
-  const categories = axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/categories`)
+  const categories = axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/scope`)
     .then((response) => {
       response.data.data.forEach((element, index) => {
         categoryList[index] = element.categoryName
@@ -75,7 +75,7 @@ export default function MaterialTableDemo() {
       // { title: 'Barcode', field: 'barcode' },
 
       {
-        title: 'permissions', field: 'permissions', lookup: categoryList
+        title: 'Permissions', field: 'permissions',    lookup: { admin: 'Admin', user: 'User' }
       },
       // {
       //   title: 'Featured',
@@ -153,6 +153,7 @@ export default function MaterialTableDemo() {
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
+         //   newData={...newData, permissions: newData.permissions}
             axios.post(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers`, newData)
               .then(function (response) {
                 // handle success
