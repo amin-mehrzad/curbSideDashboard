@@ -17,6 +17,12 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 
 import { Profile, SidebarNav, UpgradePlan } from './components';
 
+import jwtDecode from 'jwt-decode'
+
+const role = jwtDecode(localStorage.jwtToken).permissions
+
+console.log(role)
+
 const useStyles = makeStyles(theme => ({
   drawer: {
     width: 240,
@@ -45,7 +51,7 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const pages = [
+  const pages = (role[0] === "admin") ? [
     {
       title: 'Dashboard',
       href: '/dashboard',
@@ -104,7 +110,16 @@ const Sidebar = props => {
       href: '/settings',
       icon: <SettingsIcon />
     }
-  ];
+  ] : [
+
+      {
+        title: 'Orders',
+        href: '/orders',
+        icon: <ListAltIcon />
+      },
+
+
+    ];
 
   return (
     <Drawer

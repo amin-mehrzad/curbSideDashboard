@@ -22,6 +22,9 @@ import {
 
 import PrivateRoute from '../src/components/private-route/PrivateRoute'
 
+
+
+
 const Routes = () => {
   return (
     <Switch>
