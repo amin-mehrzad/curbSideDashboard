@@ -5,7 +5,7 @@ import React, { forwardRef, useState, useEffect } from 'react';
 // import PerfectScrollbar from 'react-perfect-scrollbar';
 // import { makeStyles } from '@material-ui/styles';
 
-// import { Input } from '@material-ui/core';
+ import { Input } from '@material-ui/core';
 
 // import { getInitials } from 'helpers';
 
@@ -40,13 +40,13 @@ export default function MaterialTableDemo() {
 
   setAuthToken(`Bearer ${localStorage.jwtToken}`);
 
-  var categoryList = {}
-  const categories = axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/scope`)
-    .then((response) => {
-      response.data.data.forEach((element, index) => {
-        categoryList[index] = element.categoryName
-      })
-    })
+  // var categoryList = {}
+  // const categories = axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/scopes`)
+  //   .then((response) => {
+  //     response.data.data.forEach((element, index) => {
+  //       categoryList[index] = element.categoryName
+  //     })
+  //   })
   // var columnsData = state.columns
   // columnsData[6] = { title: 'Category', field: 'category', lookup: categoryList }
   // console.log(columnsData)
@@ -65,6 +65,8 @@ export default function MaterialTableDemo() {
         title: 'Password',
         field: 'password',
         render: rowData => <div><span>*********</span></div>,
+        //editComponent: props => <Input type="password"  readonly/>
+
       },
 
       // {
@@ -181,15 +183,18 @@ export default function MaterialTableDemo() {
 
             if (oldData) {
 
+              console.log(newData)
+              console.log(oldData)
+
               axios.put(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/${oldData._id}`, newData)
                 .then(function (response) {
-                  console.log(response.data.result)
+                  console.log(response.data)
                   setTimeout(() => {
 
                     resolve();
                     setState((prevState) => {
                       const data = [...prevState.data];
-                      data[data.indexOf(oldData)] = response.data.result;
+                      data[data.indexOf(oldData)] = response.data;
                       return { ...prevState, data };
                     });
 

@@ -19,9 +19,12 @@ import { Profile, SidebarNav, UpgradePlan } from './components';
 
 import jwtDecode from 'jwt-decode'
 
-const role = jwtDecode(localStorage.jwtToken).permissions
+// const role =(typeof localStorage.jwtToken != "undefined")? jwtDecode(localStorage.jwtToken).permissions : false
 
-console.log(role)
+
+// console.log(typeof localStorage.jwtToken != "undefined")
+// console.log(role)
+//console.log(jwtDecode(localStorage.jwtToken))
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -51,7 +54,14 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const pages = (role[0] === "admin") ? [
+  const role =(typeof localStorage.jwtToken != "undefined")? jwtDecode(localStorage.jwtToken).permissions : false
+
+
+console.log(typeof localStorage.jwtToken != "undefined")
+console.log(role)
+
+  const pages = (role[0] === "admin" ) ? [
+  //  const pages = ( true) ? [
     {
       title: 'Dashboard',
       href: '/dashboard',
@@ -116,7 +126,7 @@ const Sidebar = props => {
         title: 'Orders',
         href: '/orders',
         icon: <ListAltIcon />
-      },
+      }
 
 
     ];

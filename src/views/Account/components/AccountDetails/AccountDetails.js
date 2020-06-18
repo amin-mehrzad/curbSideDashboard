@@ -48,7 +48,7 @@ const AccountDetails = props => {
   useEffect(() => {
     async function getInfo() {
       setAuthToken(`Bearer ${localStorage.jwtToken}`);
-      const userInfo = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/users`)
+      const userInfo = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/adminUsers/info`)
       const websiteInfo = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/API/websites`)
       setValues({
         ...values,
